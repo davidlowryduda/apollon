@@ -3,7 +3,7 @@
 from cmath import *
 import random
 
-from mycolors import *
+#from mycolors import *
 
 class Circle(object):
     """
@@ -119,18 +119,18 @@ class ApollonianGasket(object):
     """
     Container for an Apollonian Gasket.
     """
-    def __init__(self, r1, r2, r3):
+    def __init__(self, c1, c2, c3):
         """
         Creates a basic apollonian Gasket with four circles.  
 
-        @param r1, r2, r3: The radii of the three inner circles of the
+        @param r1, r2, r3: The curvatures of the three inner circles of the
         starting set (i.e. depth 0 of the recursion). The fourth,
         enclosing circle will be calculated from them.
-        @type r1: int or float
-        @type r2: int or float
-        @type r3: int or float
+        @type c1: int or float
+        @type c2: int or float
+        @type c3: int or float
         """
-        self.start = tangentCirclesFromRadii( r1, r2, r3 )
+        self.start = tangentCirclesFromRadii( 1/c1, 1/c2, 1/c3 )
         self.genCircles = list(self.start)
 
     def recurse(self, circles, depth, maxDepth):
@@ -169,6 +169,14 @@ class ApollonianGasket(object):
         self.recurse( (cn3, c1, c2, c4), depth+1, maxDepth )
         self.recurse( (cn4, c1, c2, c3), depth+1, maxDepth )
 
+    def generate(self, depth):
+        """
+        Wrapper for the recurse function. Generate the AG,
+        @param depth: Recursion depth of the Gasket
+        @type depth: int
+        """
+        self.recurse(self.start, 0, depth)
+
     def toSVG( self, filename, colorMode = "none", colorScheme = "Blues", colorNum = 7 ):
         """
         Save AG to file.
@@ -176,6 +184,7 @@ class ApollonianGasket(object):
         @type filename: string
         """
         # Biggest circle (the enclosing one, hopefully) which has negative radius
+        # If not, then we picked an unlucky set of radii at the start.
         big = min( self.genCircles, key=lambda c: c.r.real )
         self.genCircles.remove(big)
         self.genCircles.insert(0, big)
