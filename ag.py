@@ -16,10 +16,12 @@ def parseArguments(argv, colors):
 
     parser = argparse.ArgumentParser(description=description, prog=name)
 
-    parser.add_argument("-d", "--depth", metavar="D", type=int, default=3, help="Recursion depth, generates 2*3^{D+1} circles.")
+    parser.add_argument("-d", "--depth", metavar="D", type=int, default=3, help="Recursion depth, generates 2*3^{D+1} circles. Usually safe for D<=10. For higher D use --force if you know what you are doing.")
     parser.add_argument("-o", "--output", metavar="", type=str, default="", help="Output file name. If left blank, default is created from circle curvatures.")
     parser.add_argument("-r", "--radii", action="store_true", default=False, help="Interpret c1, c2, c3 as radii and not as curvatures")
-    parser.add_argument("--color", choices=colors, metavar='', default='none', help="Color Scheme. Choose from "+", ".join(colors))
+    parser.add_argument("--color", choices=colors, metavar='SCHEME', default='none', help="Color Scheme. Choose from "+", ".join(colors))
+    parser.add_argument("--treshold", metavar='T', default=0.005, type=float, help="Don't save circles that are too small. Useful for higher depths to reduce filesize.")
+    parser.add_argument("--force", action="store_true", default=False, help="Use if you want a higher recursion depth than 10.")
 
     parser.add_argument("c1", type=float, help="Curvature of first circle")
     parser.add_argument("c2", type=float, help="Curvature of second circle")
@@ -102,6 +104,12 @@ def main():
 
     ag = ApollonianGasket(args.c1, args.c2, args.c3)
 
+    # At a recursion depth > 10 things start to get serious.
+    if args.depth > 10:
+        if not args.force:
+            print("Note: Number of cicles increases exponentially with 2*3^{D+1} at depth D.\nIf you want to use D>10, specify the --force option.")
+            args.depth = 10
+
     ag.generate(args.depth)
 
     # Get smallest and biggest radius
@@ -116,7 +124,7 @@ def main():
         # resolutions up to 11. Make this configurable.
         mp = color.makeMap(smallest, biggest, args.color, 8)
 
-    svg = ag_to_svg(ag.genCircles, mp)
+    svg = ag_to_svg(ag.genCircles, mp, tresh=args.treshold)
     
     # User supplied filename? If not, we need to construct something.
     if len(args.output) == 0:
