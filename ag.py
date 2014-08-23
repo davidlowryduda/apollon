@@ -33,6 +33,12 @@ def colorMsg(color):
         print("%s: %d -- %d" % (i["name"], i["low"], i["high"]))
 
 def ag_to_svg(circles, colors, tresh=0.005):
+    """
+    Convert a list of circles to svg, optionally color them.
+    @param circles: A list of L{Circle}s
+    @param colors: A L{ColorMap} object
+    @param tresh: Only circles with a radius greater than the product of tresh and maximal radius are saved
+    """
     svg = []
     
     # Find the biggest circle, which hopefully is the enclosing one
@@ -90,7 +96,6 @@ def main():
 
     # Given curvatures were in fact radii, so take the inverse
     if args.radii:
-        print('gotcha')
         args.c1 = 1/args.c1
         args.c2 = 1/args.c2
         args.c3 = 1/args.c3
@@ -104,9 +109,12 @@ def main():
     biggest = abs(max(ag.genCircles, key=lambda c: abs(c.r.real)).r.real)
 
     # Construct color map 
-    # TODO: resolution of 8 is hardcoded, some color schemes have
-    # resolutions up to 11. Make this configurable.
-    mp = color.makeMap(smallest, biggest, args.color, 8)
+    if args.color == 'none':
+        mp = ColorMap('none')
+    else:
+        # TODO: resolution of 8 is hardcoded, some color schemes have
+        # resolutions up to 11. Make this configurable.
+        mp = color.makeMap(smallest, biggest, args.color, 8)
 
     svg = ag_to_svg(ag.genCircles, mp)
     

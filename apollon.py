@@ -123,7 +123,7 @@ class ApollonianGasket(object):
         """
         Creates a basic apollonian Gasket with four circles.  
 
-        @param r1, r2, r3: The curvatures of the three inner circles of the
+        @param c1, c2, c3: The curvatures of the three inner circles of the
         starting set (i.e. depth 0 of the recursion). The fourth,
         enclosing circle will be calculated from them.
         @type c1: int or float
@@ -177,94 +177,3 @@ class ApollonianGasket(object):
         """
         self.recurse(self.start, 0, depth)
 
-    def toSVG( self, filename, colorMode = "none", colorScheme = "Blues", colorNum = 7 ):
-        """
-        Save AG to file.
-        @param filename: The name of the file. Will be overwritten if exists.
-        @type filename: string
-        """
-        # Biggest circle (the enclosing one, hopefully) which has negative radius
-        # If not, then we picked an unlucky set of radii at the start.
-        big = min( self.genCircles, key=lambda c: c.r.real )
-        self.genCircles.remove(big)
-        self.genCircles.insert(0, big)
-
-        if big.r.real >= 0:
-            print( "Warning: No enclosing circle present. Not saving anything. First curvatures: %d %d %d" % (self.start[1].curvature(), self.start[1].curvature(), self.start[1].curvature()) )
-
-        corner = big.m - ( abs(big.r) + abs(big.r) * 1j )
-        vbwidth = abs(big.r)*2
-        width = 500
-
-        # Open file
-        outFile = open(filename, "w")
-        
-        # Set up viewBox
-        outFile.write( '<svg xmlns="http://www.w3.org/2000/svg" width="%f" height="%f" viewBox="%f %f %f %f">\n' % (width, width, corner.real, corner.imag, vbwidth, vbwidth))
-
-        outFile.write( '<g stroke-width="%f">\n' % (vbwidth/width) )
-
-        # Iterate through circle list, circles with radius<treshold
-        # will not be saved because they are too small for printing.
-        tres = 0.005 * abs(big.r)
-
-        for c in self.genCircles:
-            if abs(c.r) > tres:
-                if( colorMode == "none" ):
-                    fill = "none"
-                elif( colorMode == "radius" ):
-                    fill = mapToColor( abs(c.r), tres, abs(big.r), colorScheme, colorNum )
-                elif( colorMode == "plan"):
-                    fill = "none"
-                    scale = 1.5/abs(big.r)
-                    outFile.write('<text x="%f" y="%f" font-size="2" text-anchor="middle">%.2f</text>\n' % ( c.m.real, c.m.imag, abs(c.r)*scale ))
-                else:
-                    fill = "none"
-                    print( "Warning: Unknown colorMode: %s" % colorMode )
-                outFile.write( '<circle cx="%f" cy="%f" r="%f" fill="%s" stroke="black"/>\n' % (c.m.real, c.m.imag, abs(c.r), fill) )
-
-        outFile.write( '</g>\n' )
-        
-        # Dump footer and close
-        outFile.write( '</svg>\n' )
-        outFile.close( )
-
-def mapToColor( num, nmin, nmax, scheme, schemenum ):
-    d = nmax - nmin
-    idx = int( abs((log(100*(num - nmin) + 1)) / (log(100*d + 1))) * (schemenum-1) )
-    #print( "nmin: %f nmax: %f" % (nmin, nmax) )
-    #print( "d: %f idx: %d num: %f" % (d, idx, num) )
-
-    if idx >= schemenum:
-        print( "Warning: Index %d out of range!" % idx )
-        idx = schemenum - 1
-
-    return mycolordict[scheme][str(schemenum)][idx]
-    
-        
-if  __name__ == "__main__":
-    ag = ApollonianGasket( 1, 1, 1 )
-    ag.recurse( ag.start, 0, 3 )
-
-    # Hack: scale up so that text has reasonable size
-    #ag.genCircles = list(map( lambda foo: Circle( foo.m.real*20, foo.m.imag*20, foo.r*20 ), ag.genCircles ))
-    #
-    #ag.toSVG("test.svg", "plan")
-
-    ag.toSVG("ag-ludger-briefkopf.svg", "none" )
-
-
-
-    exit( )
-
-    random.seed( )
-
-    for key in mycolordict:
-        print( "Calculating for Scheme: %s" % key )
-        n = len(mycolordict[key])
-        c1 = random.randrange( 1, 20, 1 ) 
-        c2 = random.randrange( 1, 20, 1 ) 
-        c3 = random.randrange( 1, 20, 1 ) 
-        ag = ApollonianGasket( 1/c1, 1/c2, 1/c3 )
-        ag.recurse( ag.start, 0, 5 )
-        ag.toSVG( "ColorTest/ag_%s-%d_%d_%d_%d.svg" % (key, n, c1, c2, c3), "radius", key, n )
