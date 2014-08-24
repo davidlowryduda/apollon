@@ -10,11 +10,11 @@ mathematical object, see wikipedia_.
 
 The code is split into the following files:
 
-- `apollon.py` contains all the pure math stuff
-- `coloring.py` contains helpers for color mapping
-- `ag.py` is a command-line tool for generating Apollonian Gaskets
-- `index.cgi` is an interactive online cgi version
-- `colorbrewer.json` contains the color schemes, copied from
+- `apollon.py`:code: contains all the pure math stuff
+- `coloring.py`:code: contains helpers for color mapping
+- `ag.py`:code: is a command-line tool for generating Apollonian Gaskets
+- `index.cgi`:code: is an interactive online cgi version
+- `colorbrewer.json`:code: contains the color schemes, copied from
   https://gist.github.com/jsundram/6004447#file-colorbrewer-json
 
 
@@ -24,15 +24,15 @@ Usage
 CLI
 ---
 
-Run `./ag.py c1 c2 c3` where c1, c2, c3 are the (positive) curvatures
-of the starting circles. Please also see the `--help` option.
+Run `./ag.py c1 c2 c3`:code: where c1, c2, c3 are the (positive) curvatures
+of the starting circles. Please also see the `--help`:code: option.
 
 Note: The method used to calculate the circles is recursive. For depth
 d, 2*3^{d+1} circles are created. It is usually save to do this up to
 d=10, but with higher values you can reach the limit of your
 RAM. Because of this, and to prevent typos potentially crashing your
 machine, the recursion depth is capped at d=10. If you know what you
-are doing, you can use the `--force` option for higher values.
+are doing, you can use the `--force`:code: option for higher values.
 
 CGI
 ---
@@ -49,10 +49,10 @@ Needs python3 and the other three files to work.
 Documentation
 =============
 
-For the cli-program see `ag.py --help`.
+For the cli-program see `ag.py --help`:code:.
 
 For a somewhat complete documentation of the source files run
-`epydoc --html apollon.py ag.py coloring.py`
+`epydoc --html apollon.py ag.py coloring.py`:code:
 
 BUGS
 ====
@@ -74,9 +74,9 @@ TODO
 Author & License
 ================
 
-Author: Ludger Sandig
-Contact: contact@lsandig.org
-Homepage: http://lsandig.org/
+| Author: Ludger Sandig
+| Contact: contact@lsandig.org
+| Homepage: http://lsandig.org/
 
 This software can be found on github:
 https://github.com/lsandig/apollon
