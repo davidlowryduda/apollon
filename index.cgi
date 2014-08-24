@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
 
+# Copyright (c) 2014 Ludger Sandig
+# This file is part of apollon.
+
+# Apollon is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Apollon is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
 import cgi
 import cgitb
 
@@ -7,7 +23,7 @@ from apollon import ApollonianGasket
 from coloring import ColorScheme, ColorMap
 from ag import ag_to_svg
 
-cgitb.enable()
+
 
 # Container for sanitized settings
 class Settings(object):
@@ -98,6 +114,15 @@ h1 {
     padding: 10px;
 }
 
+#about {
+    width: 780px;
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    padding: 10px;
+    clear: both;
+    margin-top: 2px;
+}
+
 input[type=number] {
     width: 75px;
 
@@ -151,11 +176,34 @@ form {
             selected = ""
         print('<option value="%s" %s>%s</value>' % (s["name"], selected, s["name"]))
 
-    # Print last chunk of html
+    # Print last chunk of form and help text
     print("""
 </select></p>
 <p><input type="submit" name="submit" value="Update"> <input type="submit" name="submit" value="Save"></p>
 </form>
+</div>
+
+<div id="about">
+<h2>About</h2>
+
+<p> Apollonian Gaskets are groups of circles in which three are
+mutally tangent to each other. You can think of it as tightly filling
+a big circle with lots of smaller cicles. These sets of circles can be
+computed recusively with relative ease. If you are interested in the
+mathematical part, see <a
+href="https://en.wikipedia.org/wiki/Apollonian_gasket">Wikipedia on
+this subject</a>. </p>
+
+<p>This site showcases a small command line program I wrote to
+generate svg images of those circles. It can be found on <a
+href="https://github.com/lsandig/apollon">github</a>.</p>
+
+<p>Please note that the online version has a recursion limit of depth
+5 to reduce the time and memory consumption on the server. With the
+command line version only your RAM is the limit.</p>
+
+<p>This is free software published under the GPLv3.</p>
+
 </div>
 </body>
 </html>
@@ -168,6 +216,9 @@ def print_only_image(svg):
 
 
 if __name__ == "__main__":
+    # Debugging
+    #cgitb.enable()
+
     # Get settings from form
     form = cgi.FieldStorage()
     param = Settings(form)
