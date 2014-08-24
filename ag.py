@@ -13,6 +13,7 @@ def parseArguments(argv, colors):
     name = argv[0]
 
     colors.append('none')
+    colors.sort()
 
     parser = argparse.ArgumentParser(description=description, prog=name)
 
