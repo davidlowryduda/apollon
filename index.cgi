@@ -120,7 +120,11 @@ h1 {
     border-radius: 25px;
     padding: 10px;
     clear: both;
-    margin-top: 2px;
+}
+
+div.wrapper {
+    padding-top: 2px;
+    clear: both;
 }
 
 input[type=number] {
@@ -182,7 +186,7 @@ form {
 <p><input type="submit" name="submit" value="Update"> <input type="submit" name="submit" value="Save"></p>
 </form>
 </div>
-
+<div class="wrapper">
 <div id="about">
 <h2>About</h2>
 
@@ -204,6 +208,7 @@ command line version only your RAM is the limit.</p>
 
 <p>This is free software published under the GPLv3.</p>
 
+</div>
 </div>
 </body>
 </html>
