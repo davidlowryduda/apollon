@@ -28,7 +28,7 @@ Run `./ag.py c1 c2 c3`:code: where c1, c2, c3 are the (positive) curvatures
 of the starting circles. Please also see the `--help`:code: option.
 
 Note: The method used to calculate the circles is recursive. For depth
-d, 2*3^{d+1} circles are created. It is usually save to do this up to
+d, 2*3^{d+1} circles are created. It is usually safe to do this up to
 d=10, but with higher values you can reach the limit of your
 RAM. Because of this, and to prevent typos potentially crashing your
 machine, the recursion depth is capped at d=10. If you know what you
