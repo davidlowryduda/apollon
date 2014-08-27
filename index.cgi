@@ -159,9 +159,9 @@ form {
 <div id="settings">
 <form method="post" action="index.cgi" id="params">
 
-<p><label for="c1">First circle</label><input type="number" name="c1" id="c1" value="%.2f"/></p>
-<p><label for="c2">Second circle</label> <input type="number" name="c2" id="c2" value="%.2f"/></p>
-<p><label for="c3">Third circle</label><input type="number" name="c3" id="c3" value="%.2f"/></p>
+<p><label for="c1">First circle</label><input type="number" name="c1" id="c1" step="any" min="0" value="%.2f"/></p>
+<p><label for="c2">Second circle</label> <input type="number" name="c2" id="c2" step="any" min="0" value="%.2f"/></p>
+<p><label for="c3">Third circle</label><input type="number" name="c3" id="c3" step="any" min="0" value="%.2f"/></p>
 <p><label for="curv">Curvature</label><input type="radio" name="roc" id="curv" value="curvature" %s/></p>
 <p><label for="rad">Radius</label><input type="radio" name="roc" id="rad" value="radius" %s/></p>
 <p><label for="depth">Recursion depth</label> <input type="number" name="depth" value="%d" min="0" max="5"/></p>
