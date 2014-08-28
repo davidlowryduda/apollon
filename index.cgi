@@ -14,14 +14,14 @@
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Apollon.  If not, see <http://www.gnu.org/licenses/>.
 
 import cgi
 import cgitb
 
 from apollon import ApollonianGasket
 from coloring import ColorScheme, ColorMap
-from ag import ag_to_svg
+from ag import ag_to_svg, impossible_combination
 
 
 
@@ -64,6 +64,9 @@ class Settings(object):
             self.c1 = 1/self.c1
             self.c2 = 1/self.c2
             self.c3 = 1/self.c3
+
+        # AG possible in the first place?
+        self.impossible = impossible_combination(self.c1, self.c2, self.c3)
 
         # What to print: With form or only svg
         action = form.getvalue("submit","Update")
@@ -228,33 +231,36 @@ if __name__ == "__main__":
     form = cgi.FieldStorage()
     param = Settings(form)
 
-
-    # Magic
-    ag = ApollonianGasket(param.c1, param.c2, param.c3)
-    
-    ag.generate(param.depth)
-
-    # Get smallest and biggest radius
-    smallest = abs(min(ag.genCircles, key=lambda c: abs(c.r.real)).r.real)
-    biggest = abs(max(ag.genCircles, key=lambda c: abs(c.r.real)).r.real)
-
     # Construct color map 
     schemes = ColorScheme("colorbrewer.json")
 
-    if param.color == 'none':
-        mp = ColorMap('none')
+    if not param.impossible:
+        # Magic
+        ag = ApollonianGasket(param.c1, param.c2, param.c3)
+        
+        ag.generate(param.depth)
+        
+        # Get smallest and biggest radius
+        smallest = abs(min(ag.genCircles, key=lambda c: abs(c.r.real)).r.real)
+        biggest = abs(max(ag.genCircles, key=lambda c: abs(c.r.real)).r.real)
+
+
+        if param.color == 'none':
+            mp = ColorMap('none')
+        else:
+            mp = schemes.makeMap(smallest, biggest, param.color, param.resolution)
+            
+        # Convert to svg
+        svg = ag_to_svg(ag.genCircles, mp, tresh=0.005)
+
+        # Output
+        if param.onlysvg:
+            print_only_image(svg)
+        else:
+            print_with_form(svg, param, schemes)
     else:
-        mp = schemes.makeMap(smallest, biggest, param.color, param.resolution)
-
-    # Convert to svg
-    svg = ag_to_svg(ag.genCircles, mp, tresh=0.005)
-
-    # Output
-    if param.onlysvg:
-        print_only_image(svg)
-    else:
-        print_with_form(svg, param, schemes)
-
+        errortext = "<h2>No Apollonian gasket possible for these curvatures :(</2>"
+        print_with_form(errortext, param, schemes)
 
 
 

@@ -16,11 +16,12 @@
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Apollon.  If not, see <http://www.gnu.org/licenses/>.
 
 
 import argparse
 import sys
+import math
 
 from apollon import ApollonianGasket
 from coloring import ColorMap, ColorScheme
@@ -101,7 +102,22 @@ def ag_to_svg(circles, colors, tresh=0.005):
 
     return ''.join(svg)
 
-
+def impossible_combination(c1, c2, c3):
+    # If any curvatures x, y, z satisfy the equation
+    # x = 2*sqrt(y*z) + y + z
+    # then no fourth enclosing circle can be genereated, because it
+    # would be a line.
+    # We need to see for c1, c2, c3 if they could be "x".
+    
+    impossible = False
+    
+    sets = [(c1,c2,c3), (c2,c3,c1), (c3,c1,c2)]
+    
+    for (x, y, z) in sets:
+        if x == 2*math.sqrt(y*z) + y + z:
+            impossible = True
+    
+    return impossible
 
 def main():
     color = ColorScheme("colorbrewer.json")
@@ -109,12 +125,16 @@ def main():
 
     args = parseArguments(sys.argv, available)
 
+    # Sanity checks
     for c in [args.c1, args.c2, args.c3]:
         if c == 0:
             print("Error: curvature or radius can't be 0")
             exit(1)
+    if impossible_combination(args.c1, args.c2, args.c3):
+        print("Error: no apollonian gasket possible for these curvatures")
+        exit(1)
 
-    # Given curvatures were in fact radii, so take the inverse
+    # Given curvatures were in fact radii, so take the reciprocal
     if args.radii:
         args.c1 = 1/args.c1
         args.c2 = 1/args.c2

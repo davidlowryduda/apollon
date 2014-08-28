@@ -70,6 +70,11 @@ TODO
   recursion which are too small to be seen.
 - fastcgi version of index.cgi?
 
+Credits
+=======
+
+Colors from www.ColorBrewer.org by Cynthia A. Brewer, Geography,
+Pennsylvania State University.
 
 Author & License
 ================
