@@ -54,17 +54,10 @@ For the cli-program see `ag.py --help`:code:.
 For a somewhat complete documentation of the source files run
 `epydoc --html apollon.py ag.py coloring.py`:code:
 
-BUGS
-====
-
-For some combinations of curvatures no enclosing circles can be
-found. This occurs when the circle would be a straight line (0
-curvature, infinite radius). Expect a crash of the program.
 
 TODO
 ====
 - More logical structure of the source files
-- Better error handling
 - Better documentation
 - A time- and RAM-saving algorithm that excludes Circles from
   recursion which are too small to be seen.
