@@ -54,6 +54,8 @@ For the cli-program see `ag.py --help`:code:.
 For a somewhat complete documentation of the source files run
 `epydoc --html apollon.py ag.py coloring.py`:code:
 
+For a writeup on how the math behind this program works see my
+blogpost here: http://lsandig.org/blog/2014/08/apollon-python/en/
 
 TODO
 ====
@@ -68,6 +70,8 @@ Credits
 
 Colors from www.ColorBrewer.org by Cynthia A. Brewer, Geography,
 Pennsylvania State University.
+
+Thanks to Dorothee Henke for helping me figuring out the math.
 
 Author & License
 ================
