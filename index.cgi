@@ -205,6 +205,10 @@ this subject</a>. </p>
 generate svg images of those circles. It can be found on <a
 href="https://github.com/lsandig/apollon">github</a>.</p>
 
+<p>For a more in-depth explanation of this implementation see <a
+href="http://lsandig.org/blog/2014/08/apollon-python/en/">this
+post</a> on my blog (English and German version)</p>
+
 <p>Please note that the online version has a recursion limit of depth
 5 to reduce the time and memory consumption on the server. With the
 command line version only your RAM is the limit.</p>
